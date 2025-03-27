@@ -19,7 +19,6 @@ public class Main {
         em.close();
         emf.close();
 
-
         Principal windowPrincipal = new Principal();
         windowPrincipal.setVisible(true);
         windowPrincipal.setLocationRelativeTo(null);
