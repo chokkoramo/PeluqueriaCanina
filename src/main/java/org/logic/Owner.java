@@ -15,7 +15,7 @@ public class Owner implements Serializable {
     private String ownerPhone;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pet> pets;
+    public List<Pet> pets;
 
     public Owner(){}
 

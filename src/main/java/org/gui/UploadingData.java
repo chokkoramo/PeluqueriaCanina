@@ -2,7 +2,6 @@ package org.gui;
 
 import org.logic.Controller;
 import org.logic.Pet;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class UploadingData extends JFrame {
     public UploadingData() {
         setTitle("Carga de datos");
         setSize(600, 500);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

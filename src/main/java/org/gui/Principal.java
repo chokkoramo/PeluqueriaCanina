@@ -25,5 +25,19 @@ public class Principal extends JFrame{
                 windowData.setLocationRelativeTo(null);
             }
         });
+        btnSeeData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ViewData windowView = new ViewData();
+                windowView.setVisible(true);
+                windowView.setLocationRelativeTo(null);
+            }
+        });
+        btnExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
     }
 }

@@ -3,9 +3,11 @@ package org.persistence;
 import org.logic.Owner;
 import org.logic.Pet;
 
+import java.util.List;
+
 public class PersistenceController {
     OwnerJpaController ownerJPA = new OwnerJpaController();
-//    PetJpaController petJPA = new PetJpaController();
+    PetJpaController petJPA = new PetJpaController();
 
 
     public void save(Owner owner) {
@@ -21,4 +23,8 @@ public class PersistenceController {
         }
     }
 
+    public List<Pet> getPetList() {
+
+        return petJPA.findPetEntities();
+    }
 }
