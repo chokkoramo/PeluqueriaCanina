@@ -48,4 +48,12 @@ public class Owner implements Serializable {
     public void setOwnerPhone(String ownerPhone) {
         this.ownerPhone = ownerPhone;
     }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
 }
