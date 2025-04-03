@@ -17,27 +17,20 @@ public class Principal extends JFrame{
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        btnUploadingData.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UploadingData windowData = new UploadingData();
-                windowData.setVisible(true);
-                windowData.setLocationRelativeTo(null);
-            }
-        });
-        btnSeeData.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewData windowView = new ViewData();
-                windowView.setVisible(true);
-                windowView.setLocationRelativeTo(null);
-            }
-        });
-        btnExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        btnUploadingData.addActionListener(e -> goToUploadingData());
+        btnSeeData.addActionListener(e -> goToSeeData());
+        btnExit.addActionListener(e -> System.exit(0));
+    }
+
+    private void goToUploadingData(){
+        UploadingData windowData = new UploadingData();
+        windowData.setVisible(true);
+        windowData.setLocationRelativeTo(null);
+    }
+
+    private void goToSeeData(){
+        ViewData windowView = new ViewData();
+        windowView.setVisible(true);
+        windowView.setLocationRelativeTo(null);
     }
 }

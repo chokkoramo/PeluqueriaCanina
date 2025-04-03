@@ -30,7 +30,7 @@
                 </constraints>
                 <properties>
                   <enabled value="true"/>
-                  <font name="Kristen ITC" size="24" style="0"/>
+                  <font name="Source Code Pro" size="24" style="0"/>
                   <text value="Carga de datos"/>
                 </properties>
               </component>

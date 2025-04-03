@@ -111,7 +111,6 @@ public class UploadingData extends JFrame {
         add(panelData);
         setVisible(true);
 
-        // Eventos de los Botones
         btnClear.addActionListener(e -> clearFields());
         btnBack.addActionListener(e -> dispose());
         btnAddPet.addActionListener(e -> addPet());

@@ -4,10 +4,7 @@ import org.logic.Controller;
 import org.logic.Pet;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.List;
 
 public class ViewData extends JFrame {
@@ -24,12 +21,12 @@ public class ViewData extends JFrame {
         setTitle("Carga de datos");
         setBounds(100, 100, 450, 300);
         setLocationRelativeTo(null);
-        setSize(550, 400);
+        setSize(600, 400);
         setVisible(true);
         setContentPane(panelView);
 
         btnBack.addActionListener(e -> dispose());
-
+        btnDelete.addActionListener(e -> deleteRow());
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -37,6 +34,24 @@ public class ViewData extends JFrame {
                 loadTable();
             }
         });
+    }
+
+    // Eliminar un registro
+    private void deleteRow() {
+        if(tblData.getRowCount() > 0) {
+            // -1 ninguna seleccionada
+            if(tblData.getSelectedRow() != -1) {
+                int numOwner = Integer.parseInt(tblData.getValueAt(tblData.getSelectedRow(), 0).toString());
+                controller.deleteRow(numOwner);
+                showMessage("Mascota eliminada", "Info", "Eliminar");
+                loadTable();
+            }
+            else{
+                showMessage("No se selecciono ningun registro", "Error", "Eliminar");
+            }
+        }else{
+            showMessage("No se encontraron registros", "Error", "Eliminar");
+        }
 
     }
 
@@ -47,7 +62,7 @@ public class ViewData extends JFrame {
         };
 
         String[] titles = {"Numero Mascota", "Nombre", "Color",
-                "Raza", "Alergico", "Atencion Esp.", "Nombre Dueño", "Celular"};
+                "Raza", "Alergico", "Atencion Esp.", "Nombre Dueño", "Celular", "Num Dueño"};
         tableModel.setColumnIdentifiers(titles);
 
         List<Pet> petList = controller.getPetList();
@@ -55,7 +70,7 @@ public class ViewData extends JFrame {
         if(petList !=null){
             for(Pet p : petList){
                 Object[] object = {p.getNumClient(), p.getPetName(), p.getBreed(),p.getPetColor(),p.getAllergic(),
-                p.getSpecialAttention(), p.getOwner().getOwnerName(), p.getOwner().getOwnerPhone()};
+                p.getSpecialAttention(), p.getOwner().getOwnerName(), p.getOwner().getOwnerPhone(), p.getOwner().getIdOwner()};
 
                 tableModel.addRow(object);
             }
@@ -63,4 +78,16 @@ public class ViewData extends JFrame {
         tblData.setModel(tableModel);
     }
 
+    public void showMessage(String msg, String type, String title) {
+        JOptionPane optionPane = new JOptionPane(msg);
+        if(type.equals("Info")) {
+            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+        }else if(type.equals("Error")) {
+            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+        }
+        JDialog dialog = optionPane.createDialog(title);
+        dialog.setVisible(true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setAlwaysOnTop(true);
+    }
 }
