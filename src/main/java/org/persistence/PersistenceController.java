@@ -28,7 +28,6 @@ public class PersistenceController {
     }
 
     public List<Pet> getPetList() {
-
         return petJPA.findPetEntities();
     }
 
@@ -38,5 +37,22 @@ public class PersistenceController {
         } catch (NonexistentEntityException ex){
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public List<Owner> getAllOwners() {
+        return ownerJPA.findOwnerEntities();
+    }
+
+    public void addPetsToExistingOwner(int ownerId, List<Pet> petList) {
+        Owner owner = ownerJPA.findOwner(ownerId);
+
+        for(Pet pet : petList) {
+            pet.setOwner(owner);
+            petJPA.create(pet);
+        }
+    }
+
+    public Pet getAllPets(int numOwner) {
+        return petJPA.findPet(numOwner);
     }
 }

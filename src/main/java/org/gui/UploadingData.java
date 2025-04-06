@@ -1,9 +1,13 @@
 package org.gui;
 
 import org.logic.Controller;
+import org.logic.Owner;
 import org.logic.Pet;
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,110 +15,57 @@ public class UploadingData extends JFrame {
     private JPanel panelData;
     private JTextField txtName, txtBreed, txtColor, txtOwnerName, txtOwnerPhone;
     private JComboBox<String> cmbAllergic, cmbSpecialAttention;
+    private JComboBox<Owner> cmbOwnerList;
     private JTextArea txtObservations, txtPetList;
     private JButton btnClear, btnSave, btnBack, btnAddPet;
+    private JLabel lblnameOwner;
+    private JLabel lblOwnerPhone;
+    private JLabel lblName;
+    private JLabel lblBreed;
+    private JLabel lblColor;
+    private JLabel lblAllergic;
+    private JLabel lblSpecialAttention;
+    private JLabel lblObservations;
+    private JLabel lblPetList;
     private List<Pet> petList = new ArrayList<>();
+    private List<Owner> ownerList = new ArrayList<>();
     private Controller controller = new Controller();
 
     public UploadingData() {
         setTitle("Carga de datos");
         setSize(600, 500);
         setLocationRelativeTo(null);
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-
-        panelData = new JPanel(new GridBagLayout());
-
-        // Labels y Campos de Texto
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelData.add(new JLabel("Nombre:"), gbc);
-        gbc.gridx = 1;
-        txtName = new JTextField(15);
-        panelData.add(txtName, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panelData.add(new JLabel("Raza:"), gbc);
-        gbc.gridx = 1;
-        txtBreed = new JTextField(15);
-        panelData.add(txtBreed, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panelData.add(new JLabel("Color:"), gbc);
-        gbc.gridx = 1;
-        txtColor = new JTextField(15);
-        panelData.add(txtColor, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        panelData.add(new JLabel("Alérgico:"), gbc);
-        gbc.gridx = 1;
-        cmbAllergic = new JComboBox<>(new String[]{"No", "Sí"});
-        panelData.add(cmbAllergic, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        panelData.add(new JLabel("Atención Especial:"), gbc);
-        gbc.gridx = 1;
-        cmbSpecialAttention = new JComboBox<>(new String[]{"No", "Sí"});
-        panelData.add(cmbSpecialAttention, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        panelData.add(new JLabel("Nombre Dueño:"), gbc);
-        gbc.gridx = 1;
-        txtOwnerName = new JTextField(15);
-        panelData.add(txtOwnerName, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        panelData.add(new JLabel("Celular Dueño:"), gbc);
-        gbc.gridx = 1;
-        txtOwnerPhone = new JTextField(15);
-        panelData.add(txtOwnerPhone, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        panelData.add(new JLabel("Observaciones:"), gbc);
-        gbc.gridx = 1;
-        txtObservations = new JTextArea(3, 15);
-        JScrollPane scrollObs = new JScrollPane(txtObservations);
-        panelData.add(scrollObs, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        panelData.add(new JLabel("Mascotas Agregadas:"), gbc);
-        gbc.gridx = 1;
-        txtPetList = new JTextArea(5, 15);
-        txtPetList.setEditable(false);
-        JScrollPane scrollPets = new JScrollPane(txtPetList);
-        panelData.add(scrollPets, gbc);
-
-        // Botones
-        gbc.gridx = 0;
-        gbc.gridy = 9;
-        btnClear = new JButton("Limpiar");
-        panelData.add(btnClear, gbc);
-        gbc.gridx = 1;
-        btnSave = new JButton("Guardar");
-        panelData.add(btnSave, gbc);
-        gbc.gridx = 2;
-        btnBack = new JButton("Volver");
-        panelData.add(btnBack, gbc);
-        gbc.gridx = 3;
-        btnAddPet = new JButton("Añadir Mascota");
-        panelData.add(btnAddPet, gbc);
-
-        add(panelData);
-        setVisible(true);
+        setContentPane(panelData);
 
         btnClear.addActionListener(e -> clearFields());
         btnBack.addActionListener(e -> dispose());
         btnAddPet.addActionListener(e -> addPet());
         btnSave.addActionListener(e -> saveData());
+        cmbOwnerList.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Owner selectedOwner = (Owner) cmbOwnerList.getSelectedItem();
+
+                if (selectedOwner != null && selectedOwner.getIdOwner() != 0) {
+                    // Es un dueño existente
+                    txtOwnerName.setText(selectedOwner.getOwnerName());
+                    txtOwnerPhone.setText(selectedOwner.getOwnerPhone());
+                    txtOwnerName.setEnabled(false);
+                    txtOwnerPhone.setEnabled(false);
+                } else {
+                    // Nuevo dueño
+                    txtOwnerName.setText("");
+                    txtOwnerPhone.setText("");
+                    txtOwnerName.setEnabled(true);
+                    txtOwnerPhone.setEnabled(true);
+                }
+            }
+        });
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                loadOwners();
+            }
+        });
     }
 
     private void clearFields() {
@@ -161,24 +112,47 @@ public class UploadingData extends JFrame {
         txtBreed.setText("");
         txtColor.setText("");
         txtObservations.setText("");
+        cmbAllergic.setSelectedIndex(0);
+        cmbSpecialAttention.setSelectedIndex(0);
     }
 
     private void saveData() {
-        String ownerName = txtOwnerName.getText();
-        String ownerPhone = txtOwnerPhone.getText();
-
-        if (ownerName.isEmpty() || ownerPhone.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Completa los datos del dueño");
-            return;
-        }
+        Owner selectedOwner = (Owner) cmbOwnerList.getSelectedItem();
 
         if (petList.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Agrega al menos una mascota antes de guardar");
             return;
         }
 
-        controller.saveOwnerWithPets(ownerName, ownerPhone, petList);
-        JOptionPane.showMessageDialog(this, "Dueño y mascotas guardados con éxito");
+        // Verificamos si es un dueño existente (ID diferente de 0)
+        if (selectedOwner != null && selectedOwner.getIdOwner() != 0) {
+            controller.addPetsToExistingOwner(selectedOwner.getIdOwner(), petList);
+            JOptionPane.showMessageDialog(this, "Mascotas añadidas al dueño existente");
+        } else {
+            // Nuevo dueño
+            String ownerName = txtOwnerName.getText();
+            String ownerPhone = txtOwnerPhone.getText();
+
+            if (ownerName.isEmpty() || ownerPhone.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Completa los datos del dueño");
+                return;
+            }
+
+            controller.saveOwnerWithPets(ownerName, ownerPhone, petList);
+            JOptionPane.showMessageDialog(this, "Dueño y mascotas guardados con éxito");
+        }
+
         clearFields();
+        loadOwners();
     }
+
+    private void loadOwners() {
+        ownerList = controller.getAllOwners();
+        cmbOwnerList.removeAllItems();
+        cmbOwnerList.addItem(new Owner(0, "Nuevo Dueño", ""));
+        for (Owner owner : ownerList) {
+            cmbOwnerList.addItem(owner);
+        }
+    }
+
 }

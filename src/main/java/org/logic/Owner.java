@@ -8,7 +8,7 @@ import java.util.List;
 public class Owner implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idOwner;
 
     private String ownerName;
@@ -56,4 +56,7 @@ public class Owner implements Serializable {
     public void setPets(List<Pet> pets) {
         this.pets = pets;
     }
+
+    @Override
+    public String toString() {return idOwner + " - " + ownerName + " - " + ownerPhone;}
 }

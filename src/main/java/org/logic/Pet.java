@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Pet implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int numClient;
 
     @Column(nullable = false)
@@ -99,4 +99,7 @@ public class Pet implements Serializable {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
+
+    @Override
+    public String toString() {return petName + " - " + breed + " - " + petColor;}
 }

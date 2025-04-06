@@ -1,11 +1,8 @@
 package org.logic;
 
 import org.persistence.PersistenceController;
-import org.persistence.exceptions.NonexistentEntityException;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Controller {
     PersistenceController controlPersis = new PersistenceController();
@@ -31,5 +28,17 @@ public class Controller {
 
     public void deleteRow(int numOwner) {
         controlPersis.deleteRow(numOwner);
+    }
+
+    public List<Owner> getAllOwners() {
+        return controlPersis.getAllOwners();
+    }
+
+    public void addPetsToExistingOwner(int idOwner, List<Pet> petList) {
+        controlPersis.addPetsToExistingOwner(idOwner, petList);
+    }
+
+    public Pet getAllPets(int numOwner) {
+        return controlPersis.getAllPets(numOwner);
     }
 }
