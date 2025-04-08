@@ -38,7 +38,19 @@ public class Controller {
         controlPersis.addPetsToExistingOwner(idOwner, petList);
     }
 
-    public Pet getAllPets(int numOwner) {
-        return controlPersis.getAllPets(numOwner);
+    public Pet getSelectedPet(int numOwner) {
+        return controlPersis.getSelectedPet(numOwner);
+    }
+
+    public void modifyPet(Pet pet, String petName, String petBreed, String petColor, String petObservations,
+                          String allergic, String specialAttention) {
+        pet.setPetName(petName);
+        pet.setBreed(petBreed);
+        pet.setPetColor(petColor);
+        pet.setObservations(petObservations);
+        pet.setAllergic(allergic);
+        pet.setSpecialAttention(specialAttention);
+
+        controlPersis.modifyPet(pet);
     }
 }

@@ -1,11 +1,9 @@
 package org.gui;
 
 import org.logic.Controller;
-import org.logic.Owner;
 import org.logic.Pet;
 
 import javax.swing.*;
-import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +21,15 @@ public class ModifyData extends JFrame {
     private JComboBox<String> cmbSpecialAttention;
     private JLabel lblObservations;
     private JTextArea txtObservations;
-    private JButton btnSave;
+    private JButton btnSaveModify;
     private JButton btnBack;
     private JPanel panelModify;
     private JComboBox<Pet> cmbPetList;
 
     private Controller controller = new Controller();
     private List<Pet> petList = new ArrayList<>();
+    Pet pet = new Pet();
+
 
     public ModifyData(int numOwner) {
         setTitle("Modificar registro");
@@ -38,30 +38,13 @@ public class ModifyData extends JFrame {
         setContentPane(panelModify);
 
         btnBack.addActionListener(e -> dispose());{}
-//        cmbPetList.addItemListener(e -> {
-//            if (e.getStateChange() == ItemEvent.SELECTED) {
-//                Pet selectedPet = (Pet) cmbPetList.getSelectedItem();
-//
-//                if (selectedPet != null && selectedPet.getNumClient() != 0) {
-//                    txtName.setText(selectedPet.getPetName());
-//                    txtBreed.setText(selectedPet.getBreed());
-//                    txtColor.setText(selectedPet.getPetColor());
-//                    txtObservations.setText(selectedPet.getObservations());
-//
-//                    if  (selectedPet.getAllergic().equals("Si")) {cmbAllergic.setSelectedIndex(0);}
-//                    else if (selectedPet.getAllergic().equals("No")){cmbAllergic.setSelectedIndex(1);}
-//                    else cmbAllergic.setSelectedIndex(2);
-//                    if  (selectedPet.getAllergic().equals("Si")) {cmbSpecialAttention.setSelectedIndex(0);}
-//                    else if (selectedPet.getAllergic().equals("No")){cmbSpecialAttention.setSelectedIndex(1);}
-//                    else cmbSpecialAttention.setSelectedIndex(2);
-//                }
-//            }
-//        });
+        btnSaveModify.addActionListener(e -> saveModifyData());{}
+
         loadData(numOwner);
     }
 
     private void loadData(int numOwner) {
-        Pet pet = controller.getAllPets(numOwner);
+        this.pet = controller.getSelectedPet(numOwner);
         List<Pet> petList = controller.getPetList();
         cmbPetList.removeAllItems();
         for (Pet pets : petList) cmbPetList.addItem(pets);
@@ -71,11 +54,29 @@ public class ModifyData extends JFrame {
         txtColor.setText(pet.getPetColor());
         txtObservations.setText(pet.getObservations());
 
-        if  (pet.getAllergic().equals("Si")) {cmbAllergic.setSelectedIndex(0);}
-        else if (pet.getAllergic().equals("No")){cmbAllergic.setSelectedIndex(1);}
+        if  (pet.getAllergic().equals("Si")) {cmbAllergic.setSelectedIndex(1);}
+        else if (pet.getAllergic().equals("No")){cmbAllergic.setSelectedIndex(0);}
         else cmbAllergic.setSelectedIndex(2);
-        if  (pet.getAllergic().equals("Si")) {cmbSpecialAttention.setSelectedIndex(0);}
-        else if (pet.getAllergic().equals("No")){cmbSpecialAttention.setSelectedIndex(1);}
+        if  (pet.getSpecialAttention().equals("Si")) {cmbSpecialAttention.setSelectedIndex(1);}
+        else if (pet.getSpecialAttention().equals("No")){cmbSpecialAttention.setSelectedIndex(0);}
         else cmbSpecialAttention.setSelectedIndex(2);
+    }
+
+    private void saveModifyData() {
+        String petName = txtName.getText();
+        String petBreed = txtBreed.getText();
+        String petColor = txtColor.getText();
+        String petObservations = txtObservations.getText();
+        String allergic = (String) cmbAllergic.getSelectedItem();
+        String specialAttention = (String) cmbSpecialAttention.getSelectedItem();
+
+
+        if (petName.isEmpty() || petBreed.isEmpty() || petColor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Completa los datos de la mascota");
+            return;
+        }
+
+        controller.modifyPet(pet, petName, petBreed, petColor, petObservations, allergic, specialAttention);
+
     }
 }

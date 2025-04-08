@@ -52,7 +52,15 @@ public class PersistenceController {
         }
     }
 
-    public Pet getAllPets(int numOwner) {
+    public Pet getSelectedPet(int numOwner) {
         return petJPA.findPet(numOwner);
+    }
+
+    public void modifyPet(Pet pet) {
+        try {
+            petJPA.edit(pet);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="pets")
 public class Pet implements Serializable {
 
     @Id

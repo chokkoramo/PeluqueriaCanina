@@ -4,6 +4,7 @@ import org.logic.Controller;
 import org.logic.Owner;
 import org.logic.Pet;
 import javax.swing.*;
+import javax.swing.plaf.synth.Region;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
@@ -68,6 +69,7 @@ public class UploadingData extends JFrame {
         });
     }
 
+    // Clear data
     private void clearFields() {
         txtName.setText("");
         txtBreed.setText("");
@@ -79,6 +81,15 @@ public class UploadingData extends JFrame {
         cmbSpecialAttention.setSelectedIndex(0);
         petList.clear();
         txtPetList.setText("");
+    }
+
+    private void clearPetFields() {
+        txtName.setText("");
+        txtBreed.setText("");
+        txtColor.setText("");
+        txtObservations.setText("");
+        cmbAllergic.setSelectedIndex(0);
+        cmbSpecialAttention.setSelectedIndex(0);
     }
 
     private void addPet() {
@@ -104,16 +115,9 @@ public class UploadingData extends JFrame {
 
         petList.add(pet);
         txtPetList.append(petName + " (" + petBreed + ")\n");
+        txtOwnerName.setEnabled(false);
+        txtOwnerPhone.setEnabled(false);
         clearPetFields();
-    }
-
-    private void clearPetFields() {
-        txtName.setText("");
-        txtBreed.setText("");
-        txtColor.setText("");
-        txtObservations.setText("");
-        cmbAllergic.setSelectedIndex(0);
-        cmbSpecialAttention.setSelectedIndex(0);
     }
 
     private void saveData() {
@@ -124,12 +128,11 @@ public class UploadingData extends JFrame {
             return;
         }
 
-        // Verificamos si es un dueño existente (ID diferente de 0)
+        // Verificamos si es un dueño existente
         if (selectedOwner != null && selectedOwner.getIdOwner() != 0) {
             controller.addPetsToExistingOwner(selectedOwner.getIdOwner(), petList);
             JOptionPane.showMessageDialog(this, "Mascotas añadidas al dueño existente");
         } else {
-            // Nuevo dueño
             String ownerName = txtOwnerName.getText();
             String ownerPhone = txtOwnerPhone.getText();
 
@@ -149,7 +152,7 @@ public class UploadingData extends JFrame {
     private void loadOwners() {
         ownerList = controller.getAllOwners();
         cmbOwnerList.removeAllItems();
-        cmbOwnerList.addItem(new Owner(0, "Nuevo Dueño", ""));
+        cmbOwnerList.addItem(new Owner(0, "Nuevo Dueño", "Numero celular"));
         for (Owner owner : ownerList) {
             cmbOwnerList.addItem(owner);
         }
