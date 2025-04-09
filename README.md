@@ -33,5 +33,5 @@ El objetivo principal del proyecto es ampliar conocimientos en POO, arquitectura
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tuusuario/proyecto-mascotas.git
+   git clone https://github.com/chokkoramo/PeluqueriaCanina.git
 2. Configura tu entorno con persistencia
