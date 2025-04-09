@@ -2,6 +2,7 @@ package org.gui;
 
 import org.logic.Controller;
 import org.logic.Pet;
+import static org.gui.utils.Messages.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
@@ -15,19 +16,21 @@ public class ViewData extends JFrame {
     private JButton btnDelete;
     private JButton btnModify;
     private JButton btnBack;
+    private JButton btnRefresh;
 
     public ViewData() {
         controller = new Controller();
         setTitle("Carga de datos");
         setBounds(100, 100, 450, 300);
         setLocationRelativeTo(null);
-        setSize(600, 400);
+        setSize(650, 450);
         setVisible(true);
         setContentPane(panelView);
 
         btnBack.addActionListener(e -> dispose());
         btnDelete.addActionListener(e -> deleteRow());
         btnModify.addActionListener(e -> modifyRow());
+        btnRefresh.addActionListener(e -> loadTable());
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -39,12 +42,17 @@ public class ViewData extends JFrame {
 
     private void deleteRow() {
         if(tblData.getRowCount() > 0) {
-            // -1 ninguna seleccionada
+            // -1 ning seleccionada
             if(tblData.getSelectedRow() != -1) {
                 int numOwner = Integer.parseInt(tblData.getValueAt(tblData.getSelectedRow(), 0).toString());
-                controller.deleteRow(numOwner);
-                showMessage("Mascota eliminada", "Info", "Eliminar");
-                loadTable();
+                boolean confirmed = showConfirm("¿Estas seguro que quieres eliminar este registro?", "Confirmar eliminacion");
+                if(confirmed) {
+                    controller.deleteRow(numOwner);
+                    showMessage("Mascota eliminada correctamente", "Info", "Mascota eliminada");
+                    loadTable();
+                }else{
+                    showMessage("Eliminacion cancelada", "Info", "Eliminar");
+                }
             }
             else{
                 showMessage("No se selecciono ningun registro", "Error", "Eliminar");
@@ -60,8 +68,8 @@ public class ViewData extends JFrame {
             public boolean isCellEditable(int row, int column){return false;}
         };
 
-        String[] titles = {"Numero Mascota", "Nombre", "Color",
-                "Raza", "Alergico", "Atencion Esp.", "Nombre Dueño", "Celular", "Num Dueño"};
+        String[] titles = {"Num.Mascota", "Nombre", "Color",
+                "Raza", "Alergico", "Atencion.Esp.", "Dueño", "Celular", "Num.Dueño"};
         tableModel.setColumnIdentifiers(titles);
 
         List<Pet> petList = controller.getPetList();
@@ -92,18 +100,5 @@ public class ViewData extends JFrame {
         }else{
             showMessage("No se encontraron registros", "Error", "Eliminar");
         }
-    }
-
-    public void showMessage(String msg, String type, String title) {
-        JOptionPane optionPane = new JOptionPane(msg);
-        if(type.equals("Info")) {
-            optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-        }else if(type.equals("Error")) {
-            optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
-        }
-        JDialog dialog = optionPane.createDialog(title);
-        dialog.setVisible(true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setAlwaysOnTop(true);
     }
 }

@@ -3,9 +3,8 @@ package org.gui;
 import org.logic.Controller;
 import org.logic.Owner;
 import org.logic.Pet;
+import static org.gui.utils.Messages.*;
 import javax.swing.*;
-import javax.swing.plaf.synth.Region;
-import java.awt.event.ComponentAdapter;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -101,7 +100,7 @@ public class UploadingData extends JFrame {
         String specialAttention = (String) cmbSpecialAttention.getSelectedItem();
 
         if (petName.isEmpty() || petBreed.isEmpty() || petColor.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Completa los datos de la mascota");
+            showMessage("Completa los cargos", "Error", "Campos vacios");
             return;
         }
 
@@ -124,31 +123,31 @@ public class UploadingData extends JFrame {
         Owner selectedOwner = (Owner) cmbOwnerList.getSelectedItem();
 
         if (petList.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Agrega al menos una mascota antes de guardar");
+            showMessage("Agrega al menos una mascota antes de guardar", "Error", "Mascotas vacias");
             return;
         }
 
-        // Verificamos si es un dueño existente
+        // Verificar si es un dueño existente
         if (selectedOwner != null && selectedOwner.getIdOwner() != 0) {
             controller.addPetsToExistingOwner(selectedOwner.getIdOwner(), petList);
-            JOptionPane.showMessageDialog(this, "Mascotas añadidas al dueño existente");
+            showMessage("Mascota añadida correctamente", "Info", "Mascota Añadida!");
         } else {
             String ownerName = txtOwnerName.getText();
             String ownerPhone = txtOwnerPhone.getText();
 
             if (ownerName.isEmpty() || ownerPhone.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Completa los datos del dueño");
+                showMessage("Datos del dueño vacios", "Error", "Campos vacios");
                 return;
             }
 
             controller.saveOwnerWithPets(ownerName, ownerPhone, petList);
-            JOptionPane.showMessageDialog(this, "Dueño y mascotas guardados con éxito");
+            showMessage("Dueño y mascotas guardado correctamente", "Info", "Guardado con exito");
         }
 
         clearFields();
         loadOwners();
     }
-
+    
     private void loadOwners() {
         ownerList = controller.getAllOwners();
         cmbOwnerList.removeAllItems();

@@ -2,6 +2,7 @@ package org.gui;
 
 import org.logic.Controller;
 import org.logic.Pet;
+import static org.gui.utils.Messages.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -70,13 +71,14 @@ public class ModifyData extends JFrame {
         String allergic = (String) cmbAllergic.getSelectedItem();
         String specialAttention = (String) cmbSpecialAttention.getSelectedItem();
 
-
         if (petName.isEmpty() || petBreed.isEmpty() || petColor.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Completa los datos de la mascota");
+            showMessage("Completa los campos necesarios", "Error", "Formulario incompleto");
             return;
         }
 
         controller.modifyPet(pet, petName, petBreed, petColor, petObservations, allergic, specialAttention);
+        showMessage("Valores modificados con exito", "Info", "Datos modificados");
+        dispose();
 
     }
 }
